@@ -1,5 +1,8 @@
 # LaTeX Docker
 
-For both amd64 and arm64.
+[![Docker](https://github.com/tgoelles/LaTex_docker/actions/workflows/docker-image.yml/badge.svg)](https://github.com/tgoelles/LaTex_docker/actions/workflows/docker-image.yml)
 
-Now also contains uv to handle Python installations.
+* debian base image
+* texlive full with extra tools
+* For both amd64 and arm64.
+* Now also contains uv to handle Python installations later on.
