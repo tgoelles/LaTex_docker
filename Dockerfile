@@ -1,4 +1,4 @@
-FROM debian:stable-20250317
+FROM debian:trixie-20260112
 
 ARG USER_NAME=vscode
 ARG USER_HOME=/home/vscode
@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y \
   make \
   pandoc \
   fig2dev \
+  ripgrep \
+  just \
   hunspell  \
   default-jre-headless \
   locales && \
