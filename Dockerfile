@@ -1,17 +1,5 @@
 FROM debian:trixie-20260112
 
-ARG USER_NAME=vscode
-ARG USER_HOME=/home/vscode
-ARG USER_ID=1000
-ARG USER_GECOS=vscode
-
-RUN adduser \
-  --home "$USER_HOME" \
-  --uid $USER_ID \
-  --gecos "$USER_GECOS" \
-  --disabled-password \
-  "$USER_NAME"
-
 
 RUN apt-get update && apt-get install -y \
   texlive-full \
@@ -19,6 +7,7 @@ RUN apt-get update && apt-get install -y \
   wget \
   curl \
   git \
+  adduser \
   openssh-client \
   make \
   pandoc \
@@ -33,6 +22,19 @@ RUN apt-get update && apt-get install -y \
   apt-get --purge remove -y .\*-doc$ && \
   # Remove more unnecessary stuff
   apt-get clean -y
+
+ARG USER_NAME=vscode
+ARG USER_HOME=/home/vscode
+ARG USER_ID=1000
+ARG USER_GECOS=vscode
+
+RUN adduser \
+  --home "$USER_HOME" \
+  --uid $USER_ID \
+  --gecos "$USER_GECOS" \
+  --disabled-password \
+  "$USER_NAME"
+
 
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
   locale-gen
