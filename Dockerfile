@@ -37,13 +37,12 @@ RUN apt-get update && apt-get install -y \
   # but it only adds some overhead while building the image.
   apt-get --purge remove -y '.*-doc' && \
   # Remove more unnecessary stuff
-  apt-get clean -y
+  apt-get clean -y && \
+
+  npm install -g bibtex-tidy doi2bib
 
 # Install prek precommit hook
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
-
-# install doi2bib and bibtex tidy
-RUN npm install -g bibtex-tidy doi2bib
 
 ARG USER_NAME=vscode
 ARG USER_HOME=/home/vscode
@@ -60,9 +59,9 @@ RUN adduser \
 
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
   locale-gen
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 # Configure shell for vscode user
 RUN echo '\
