@@ -2,7 +2,15 @@ FROM debian:trixie-20260112
 
 
 RUN apt-get update && apt-get install -y \
-  texlive-full \
+  # LaTeX packages for IEEE and EGU journals
+  texlive-base \
+  texlive-latex-recommended \
+  texlive-latex-extra \
+  texlive-publishers \
+  texlive-science \
+  texlive-fonts-recommended \
+  texlive-bibtex-extra \
+  biber \
   # some auxiliary tools
   wget \
   curl \
@@ -13,15 +21,29 @@ RUN apt-get update && apt-get install -y \
   pandoc \
   fig2dev \
   ripgrep \
+  fd-find \
   just \
   hunspell  \
+  nodejs \
+  npm \
+  chktex \
+  fzf \
+  bat \
+  zoxide \
+  eza \
   default-jre-headless \
   locales && \
   # Removing documentation packages *after* installing them is kind of hacky,
   # but it only adds some overhead while building the image.
-  apt-get --purge remove -y .\*-doc$ && \
+  apt-get --purge remove -y '.*-doc' && \
   # Remove more unnecessary stuff
   apt-get clean -y
+
+# Install prek precommit hook
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
+
+# install doi2bib and bibtex tidy
+RUN npm install -g bibtex-tidy doi2bib
 
 ARG USER_NAME=vscode
 ARG USER_HOME=/home/vscode
@@ -42,16 +64,24 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+# Configure shell for vscode user
 RUN echo '\
   RESET="\\[\\e[0m\\]"\n\
   BOLD="\\[\\e[1m\\]"\n\
   GREEN="\\[\\e[32m\\]"\n\
   BLUE="\\[\\e[34m\\]"\n\
   export PS1="${BLUE}vscode ${BLUE}${BOLD}\\w${RESET} $ "\n\
-  export LS_OPTIONS="--color=auto"\n\
   eval "$(dircolors -b)"\n\
-  alias ls="ls $LS_OPTIONS"\n\
-  ' >> /root/.bashrc
+  eval "$(zoxide init bash)"\n\
+  alias ls="eza --group-directories-first"\n\
+  alias ll="eza -lh --group-directories-first"\n\
+  alias la="eza -lah --group-directories-first"\n\
+  alias cat="bat"\n\
+  # Auto-completion for fzf\n\
+  source /usr/share/doc/fzf/examples/key-bindings.bash\n\
+  source /usr/share/doc/fzf/examples/completion.bash\n\
+  ' | tee -a /root/.bashrc >> "$USER_HOME/.bashrc"
 
-# Install uv
-RUN wget -qO- https://astral.sh/uv/install.sh | sh
+# Install uv for both root and vscode user
+RUN wget -qO- https://astral.sh/uv/install.sh | sh && \
+  su - "$USER_NAME" -c 'wget -qO- https://astral.sh/uv/install.sh | sh'
