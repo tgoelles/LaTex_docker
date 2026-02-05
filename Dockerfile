@@ -74,7 +74,7 @@ RUN echo '\
   alias ls="eza --group-directories-first"\n\
   alias ll="eza -lh --group-directories-first"\n\
   alias la="eza -lah --group-directories-first"\n\
-  alias cat="bat"\n\
+  alias cat="batcat"\n\
   # Auto-completion for fzf\n\
   source /usr/share/doc/fzf/examples/key-bindings.bash\n\
   source /usr/share/doc/fzf/examples/completion.bash\n\
@@ -83,3 +83,11 @@ RUN echo '\
 # Install uv for both root and vscode user
 RUN wget -qO- https://astral.sh/uv/install.sh | sh && \
   su - "$USER_NAME" -c 'wget -qO- https://astral.sh/uv/install.sh | sh'
+
+# install bibtex-tidy
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends npm && \
+    /usr/bin/npm install -g bibtex-tidy
+
+# install doi2bib
+RUN /root/.local/bin/uv tool install doi2bib
