@@ -38,8 +38,8 @@ RUN apt-get update && apt-get install -y \
   apt-get --purge remove -y '.*-doc' && \
   # Remove more unnecessary stuff
   apt-get clean -y && \
-
-  npm install -g bibtex-tidy doi2bib
+  # Install npm packages (npm is in /usr/bin/npm after apt install)
+  /usr/bin/npm install -g bibtex-tidy doi2bib
 
 # Install prek precommit hook
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
