@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
   texlive-science \
   texlive-fonts-recommended \
   texlive-bibtex-extra \
+  texlive-lang-other \
+  texlive-fonts-extra \
   biber \
   # some auxiliary tools
   wget \
@@ -22,7 +24,6 @@ RUN apt-get update && apt-get install -y \
   fig2dev \
   ripgrep \
   fd-find \
-  just \
   hunspell  \
   nodejs \
   npm \
@@ -39,9 +40,6 @@ RUN apt-get update && apt-get install -y \
   # Remove more unnecessary stuff
   apt-get clean -y
 
-
-# Install prek precommit hook
-RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
 
 ARG USER_NAME=vscode
 ARG USER_HOME=/home/vscode
@@ -80,9 +78,17 @@ RUN echo '\
   source /usr/share/doc/fzf/examples/completion.bash\n\
   ' | tee -a /root/.bashrc >> "$USER_HOME/.bashrc"
 
+
 # Install uv for both root and vscode user
 RUN wget -qO- https://astral.sh/uv/install.sh | sh && \
   su - "$USER_NAME" -c 'wget -qO- https://astral.sh/uv/install.sh | sh'
+
+
+# install latest just
+RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/bin/just
+
+# Install prek precommit hook
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
 
 # install bibtex-tidy
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
