@@ -85,7 +85,7 @@ RUN wget -qO- https://astral.sh/uv/install.sh | sh && \
 
 
 # install latest just
-RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/bin/just
+RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/bin/
 
 # Install prek precommit hook
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
