@@ -1,4 +1,4 @@
-FROM debian:trixie-20260112
+FROM debian:trixie-20260623
 
 
 RUN apt-get update && apt-get install -y \
@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
   chktex \
   fzf \
   bat \
+  btop \
   zoxide \
   eza \
   default-jre-headless \
@@ -88,12 +89,12 @@ RUN wget -qO- https://astral.sh/uv/install.sh | sh && \
 RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/bin/
 
 # Install prek precommit hook
-RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.3.1/prek-installer.sh | sh
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.4.5/prek-installer.sh | sh
 
 # install bibtex-tidy
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends npm && \
     /usr/bin/npm install -g bibtex-tidy
 
-# install doi2bib
-RUN /root/.local/bin/uv tool install doi2bib
+# install doi2bib and bibtui
+RUN /root/.local/bin/uv tool install doi2bib bibtui
