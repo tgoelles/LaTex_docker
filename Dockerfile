@@ -97,4 +97,5 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     /usr/bin/npm install -g bibtex-tidy
 
 # install doi2bib and bibtui
-RUN /root/.local/bin/uv tool install doi2bib bibtui
+RUN /root/.local/bin/uv tool install doi2bib && \
+  /root/.local/bin/uv tool install --prerelease=allow bibtui
